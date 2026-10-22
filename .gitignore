@@ -1,0 +1,4 @@
+.env.docker
+*.log
+Thumbs.db
+.DS_Store

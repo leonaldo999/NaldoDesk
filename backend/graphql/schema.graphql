@@ -1,0 +1,76 @@
+"A datetime string with format `Y-m-d H:i:s`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+"A client registered in the current business."
+type Client {
+    id: ID!
+    name: String!
+    email: String
+    phone: String
+    address: String
+    notes: String
+    is_active: Boolean!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+"A product registered in the current business."
+type Product {
+    id: ID!
+    sku: String!
+    name: String!
+    description: String
+    price: String!
+    stock_on_hand: Int!
+    is_active: Boolean!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+"A user who belongs to the current business."
+type User {
+    id: ID!
+    name: String!
+}
+
+"A snapshot of a product line at the time of sale."
+type SaleItem {
+    id: ID!
+    product_id: ID!
+    product_name: String!
+    product_sku: String!
+    unit_price: String!
+    quantity: Int!
+    line_total: String!
+}
+
+"A completed sale."
+type Sale {
+    id: ID!
+    client: Client @belongsTo
+    user: User! @belongsTo
+    total: String!
+    created_at: DateTime!
+    items: [SaleItem!]! @hasMany
+}
+
+"Root queries. Every query requires an authenticated user with a business."
+type Query @guard(with: ["sanctum"]) {
+    clients(search: String @rules(apply: ["nullable", "string", "max:100"])): [Client!]!
+        @paginate(builder: "App\\GraphQL\\Queries\\Clients", defaultCount: 15, maxCount: 100)
+
+    client(id: ID!): Client
+        @field(resolver: "App\\GraphQL\\Queries\\ClientById")
+
+    products(search: String @rules(apply: ["nullable", "string", "max:100"])): [Product!]!
+        @paginate(builder: "App\\GraphQL\\Queries\\Products", defaultCount: 15, maxCount: 100)
+
+    product(id: ID!): Product
+        @field(resolver: "App\\GraphQL\\Queries\\ProductById")
+
+    sales: [Sale!]!
+        @paginate(builder: "App\\GraphQL\\Queries\\Sales", defaultCount: 15, maxCount: 100)
+
+    sale(id: ID!): Sale
+        @field(resolver: "App\\GraphQL\\Queries\\SaleById")
+}
