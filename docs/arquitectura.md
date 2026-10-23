@@ -49,7 +49,7 @@ La Fase 1 se concentra deliberadamente en Laravel, PostgreSQL y REST. La incorpo
 | Jest | Pruebas de JavaScript, principalmente para el frontend | 9 |
 | Docker / Docker Compose / Nginx | Entorno reproducible y entrada HTTP al sistema | 10 |
 | Linux | Entorno operativo y administración del despliegue | 11 |
-| AWS | Alojamiento y servicios de despliegue, definidos al llegar a esa fase | 12 |
+| AWS | Alojamiento y servicios de despliegue, por definir si se retoma | Aplazado |
 
 ## 5. Organización lógica del backend
 
@@ -84,6 +84,8 @@ En la Fase 9, Jest prueba el servicio JavaScript existente de Socket.io, incluid
 
 En la Fase 10, Docker Compose ejecuta PHP-FPM/Laravel, PostgreSQL, Redis, Socket.io y Nginx. Solo Nginx publica `127.0.0.1:8080`; los puertos de PostgreSQL y Redis permanecen en la red privada de Compose. Los datos usan volúmenes propios, la configuración sensible local va en `.env.docker` ignorado por Git y las migraciones se lanzan de forma explícita. Una imagen separada incorpora PHPUnit y ejecuta pruebas contra SQLite en memoria y Redis de Compose.
 
+La Fase 11 documenta operar el mismo Compose desde Ubuntu en WSL 2 mediante la integración de Docker Desktop. No añade un daemon Docker dentro de Ubuntu ni cambia las imágenes, redes o volúmenes. La fase incluye comprobaciones Linux de servicios, API, Socket.io, pruebas del perfil Compose y persistencia al detener y volver a iniciar el stack. AWS queda aplazado; no se necesita un servidor público para preparar una presentación local del proyecto.
+
 Las ventas y los cambios de inventario pueden afectar varios registros como parte de una sola operación. Al implementar esas funciones se deberán usar transacciones de base de datos y definir cómo se manejan errores y concurrencia para evitar estados parciales. El diseño concreto se resolverá en las Fases 3 y 4.
 
 En la Fase 4, Laravel guarda venta, líneas y movimientos de inventario dentro de una transacción; bloquea las filas de producto antes de validar existencias, calcula importes en centavos enteros y conserva nombre, SKU y precio al momento de la venta. Las ventas no se editan ni borran por la API inicial.
@@ -114,7 +116,7 @@ En la Fase 4, Laravel guarda venta, líneas y movimientos de inventario dentro d
 | 9 | Jest / testing |
 | 10 | Docker + Docker Compose + Nginx |
 | 11 | Linux |
-| 12 | AWS / despliegue |
+| 12 | Portafolio local para CV: recorrido de demo, evidencias y documentación; despliegue AWS aplazado |
 
 La interfaz React está en los requisitos del producto, pero no aparece como fase independiente en este orden. Su momento de implementación debe acordarse antes de construirla. El dashboard, notificaciones y reportes también necesitan alcance detallado en las fases de dominio correspondientes.
 
@@ -129,7 +131,7 @@ La interfaz React está en los requisitos del producto, pero no aparece como fas
 | Notificaciones en tiempo real no son durables | Redis Pub/Sub puede perder mensajes si el consumidor no está conectado. Mantener PostgreSQL como fuente de verdad y hacer que el cliente vuelva a consultar REST al reconectar. |
 | Aislamiento incorrecto en Socket.io | Validar la sesión mediante Laravel y derivar en el servidor la sala desde el `business_id`; no aceptar sala o negocio enviado por el cliente. |
 | Pruebas automatizadas se incorporan tarde | Hacer verificaciones necesarias en cada fase y reservar la Fase 9 para formalizar y ampliar la estrategia. Jest cubre JavaScript; las pruebas del backend Laravel requieren seleccionar y documentar una herramienta adecuada al iniciar ese trabajo. |
-| Despliegue complejo al final | Documentar configuración y dependencias durante las fases; diseñar Docker en la Fase 10 y despliegue AWS en la Fase 12. |
+| Despliegue complejo al final | Mantener el stack local reproducible con Docker. El despliegue AWS es opcional y se definirá de nuevo si se retoma. |
 
 ## 11. Decisiones de autenticación implementadas en Fase 2
 
@@ -150,7 +152,7 @@ Se resolverán cuando sean necesarias, evitando fijar detalles sin contexto de i
 - Casos de uso adicionales para Redis, GraphQL y tiempo real fuera de la consulta GraphQL inicial y el evento `sale.created`.
 - Herramientas de pruebas del backend y estrategia completa de pruebas JavaScript.
 - Versiones compatibles de PHP, Laravel, PostgreSQL y Node.js al iniciar las fases respectivas.
-- Servicios AWS, dominio, TLS, almacenamiento, copias de seguridad y estrategia de despliegue.
+- Si se retoma AWS: servicios, región, dominio, TLS, almacenamiento, copias de seguridad, costos y estrategia de despliegue.
 
 ## 13. Criterio de cierre de la Fase 0
 

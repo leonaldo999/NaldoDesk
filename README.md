@@ -122,3 +122,15 @@ docker compose --env-file .env.docker exec app php artisan migrate --force
 ```
 
 La API queda en `http://localhost:8080`; PostgreSQL y Redis permanecen privados dentro de Compose. Este stack usa volúmenes separados y no modifica la instancia PostgreSQL de Windows.
+
+## Fase 11 — Linux con WSL 2
+
+La operación desde Ubuntu/WSL 2 está documentada en [`docs/fase-11-linux.md`](docs/fase-11-linux.md). Requiere Ubuntu con integración WSL habilitada en Docker Desktop; el equipo puede seguir usando el checkout actual de Windows desde `/mnt/c/Users/leona/Desktop/NaldoDesk`. No instales otro Docker Engine dentro de Ubuntu.
+
+## Portafolio local y Fase 12 AWS aplazada
+
+El objetivo actual es aprender y presentar el proyecto en el CV, con **USD 0 de presupuesto para servicios de infraestructura**. El [plan de portafolio y referencia de costos](docs/fase-12-aws-plan-costos.md) prioriza ejecución local con Docker, datos ficticios, documentación, pruebas y capturas/video. AWS queda aplazado; no se necesita contratar servidor ni dominio para preparar el portafolio. La estimación de pago se conserva únicamente como referencia futura.
+
+Para preparar un recorrido reproducible de login, catálogo, inventario y ventas, sigue la [guía de demostración local](docs/demo-portafolio-local.md). `naldo:seed-demo` agrega registros ficticios al negocio indicado, no crea credenciales y no reinicia el stock al repetirse.
+
+Las [evidencias del portafolio local](docs/evidencias-portafolio.md) incluyen capturas de Swagger y salud de la API, además de los resultados de las pruebas automatizadas.

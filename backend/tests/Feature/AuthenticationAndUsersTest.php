@@ -5,8 +5,8 @@ namespace Tests\Feature;
 use App\Enums\UserRole;
 use App\Models\Business;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class AuthenticationAndUsersTest extends TestCase
@@ -25,6 +25,13 @@ class AuthenticationAndUsersTest extends TestCase
         $this->getJson('/api/users')->assertUnauthorized();
     }
 
+    public function test_api_errors_are_json_even_without_an_accept_header(): void
+    {
+        $this->get('/api/users')
+            ->assertUnauthorized()
+            ->assertHeader('content-type', 'application/json');
+    }
+
     public function test_user_can_log_in_and_read_a_safe_profile(): void
     {
         $user = User::create([
@@ -37,9 +44,9 @@ class AuthenticationAndUsersTest extends TestCase
         $this->withoutMiddleware(ValidateCsrfToken::class)
             ->withHeader('Origin', 'http://localhost:5173')
             ->postJson('/api/auth/login', [
-            'email' => $user->email,
-            'password' => 'a-long-test-password',
-        ])->assertOk()
+                'email' => $user->email,
+                'password' => 'a-long-test-password',
+            ])->assertOk()
             ->assertJsonPath('user.email', $user->email)
             ->assertJsonPath('user.role', 'admin')
             ->assertJsonMissingPath('user.password');

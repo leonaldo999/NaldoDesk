@@ -16,7 +16,7 @@ Desde `backend/`, con el servidor Laravel activo:
 php artisan l5-swagger:generate
 ```
 
-Abre [http://127.0.0.1:8000/api/documentation](http://127.0.0.1:8000/api/documentation). El JSON del contrato queda accesible en `http://127.0.0.1:8000/docs?api-docs.json`.
+Abre Swagger UI en `http://127.0.0.1:8000/api/documentation` para ejecución directa o en `http://localhost:8080/api/documentation` con Docker Compose. El JSON del contrato queda en `/docs?api-docs.json`. La URL de servidor OpenAPI es relativa (`/`), por lo que Swagger usa el mismo origen y puerto donde se abrió la interfaz.
 
 Sanctum autentica mediante cookies de sesión. En Swagger UI, ejecuta primero `GET /sanctum/csrf-cookie`, luego `POST /api/auth/login`; la interfaz conserva las cookies de sesión y envía el token CSRF leído de la cookie `XSRF-TOKEN`. Usa exclusivamente datos locales de prueba.
 

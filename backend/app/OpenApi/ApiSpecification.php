@@ -11,7 +11,7 @@ use OpenApi\Attributes as OA;
         title: 'NaldoDesk API',
         description: 'API REST para gestión de negocios. La autenticación usa sesión Laravel Sanctum y cookies CSRF.'
     ),
-    servers: [new OA\Server(url: 'http://127.0.0.1:8000', description: 'Entorno local')],
+    servers: [new OA\Server(url: '/', description: 'Origen actual (local o Docker)')],
     security: [['sessionCookie' => []]],
     tags: [
         new OA\Tag(name: 'Salud'), new OA\Tag(name: 'Autenticación'), new OA\Tag(name: 'Usuarios'),
