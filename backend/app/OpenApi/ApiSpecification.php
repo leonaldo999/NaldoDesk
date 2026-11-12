@@ -15,7 +15,7 @@ use OpenApi\Attributes as OA;
     security: [['sessionCookie' => []]],
     tags: [
         new OA\Tag(name: 'Salud'), new OA\Tag(name: 'Autenticación'), new OA\Tag(name: 'Usuarios'),
-        new OA\Tag(name: 'Clientes'), new OA\Tag(name: 'Productos'), new OA\Tag(name: 'Inventario'), new OA\Tag(name: 'Ventas'),
+        new OA\Tag(name: 'Clientes'), new OA\Tag(name: 'Productos'), new OA\Tag(name: 'Inventario'), new OA\Tag(name: 'Ventas'), new OA\Tag(name: 'Reportes'),
     ],
     components: new OA\Components(
         securitySchemes: [new OA\SecurityScheme(
@@ -44,4 +44,22 @@ use OpenApi\Attributes as OA;
 #[OA\Get(path: '/api/sales', operationId: 'listSales', tags: ['Ventas'], summary: 'Lista ventas del negocio', parameters: [new OA\Parameter(name: 'per_page', in: 'query', schema: new OA\Schema(type: 'integer', maximum: 100))], responses: [new OA\Response(response: 200, description: 'Ventas paginadas')])]
 #[OA\Post(path: '/api/sales', operationId: 'createSale', tags: ['Ventas'], summary: 'Registra una venta y descuenta stock en una transacción', requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(properties: [new OA\Property(property: 'client_id', type: 'integer', nullable: true), new OA\Property(property: 'items', type: 'array', items: new OA\Items(type: 'object', properties: [new OA\Property(property: 'product_id', type: 'integer'), new OA\Property(property: 'quantity', type: 'integer', minimum: 1)], required: ['product_id', 'quantity']))], required: ['items'])), responses: [new OA\Response(response: 201, description: 'Venta creada'), new OA\Response(response: 422, description: 'Stock insuficiente o datos inválidos')])]
 #[OA\Get(path: '/api/sales/{sale}', operationId: 'getSale', tags: ['Ventas'], summary: 'Consulta una venta con sus artículos históricos', parameters: [new OA\Parameter(name: 'sale', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))], responses: [new OA\Response(response: 200, description: 'Venta'), new OA\Response(response: 404, description: 'No encontrada')])]
+#[OA\Get(
+    path: '/api/reports/sales', operationId: 'salesReport', tags: ['Reportes'],
+    summary: 'Total y cantidad de ventas en un período inclusivo de Lima',
+    parameters: [
+        new OA\Parameter(name: 'from', in: 'query', required: true, schema: new OA\Schema(type: 'string', format: 'date')),
+        new OA\Parameter(name: 'to', in: 'query', required: true, schema: new OA\Schema(type: 'string', format: 'date')),
+    ],
+    responses: [new OA\Response(response: 200, description: 'Resumen de ventas'), new OA\Response(response: 422, description: 'Período inválido o mayor a 366 días')]
+)]
+#[OA\Get(
+    path: '/api/reports/low-stock', operationId: 'lowStockReport', tags: ['Reportes'],
+    summary: 'Productos activos con existencias iguales o inferiores al umbral',
+    parameters: [
+        new OA\Parameter(name: 'threshold', in: 'query', schema: new OA\Schema(type: 'integer', default: 5, minimum: 0, maximum: 1000000)),
+        new OA\Parameter(name: 'page', in: 'query', schema: new OA\Schema(type: 'integer', minimum: 1)),
+    ],
+    responses: [new OA\Response(response: 200, description: 'Productos paginados'), new OA\Response(response: 422, description: 'Filtros inválidos')]
+)]
 final class ApiSpecification {}

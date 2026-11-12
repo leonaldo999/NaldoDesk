@@ -14,6 +14,7 @@ import Home from '../features/Home'
 import Catalog from '../features/Catalog'
 import Inventory from '../features/Inventory'
 import Users from '../features/Users'
+import Reports from '../features/Reports'
 import { SalesList, SaleDetail, NewSale } from '../features/Sales'
 function Protected() {
   return useSession().user ? <Outlet /> : <Navigate to="/login" replace />
@@ -40,6 +41,7 @@ export default function App() {
               <Route path="ventas/nueva" element={<NewSale />} />
               <Route path="ventas/:id" element={<SaleDetail />} />
               <Route path="usuarios" element={<Users />} />
+              <Route path="reportes" element={<Reports />} />
               <Route
                 path="*"
                 element={

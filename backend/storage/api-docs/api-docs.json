@@ -7,8 +7,8 @@
     },
     "servers": [
         {
-            "url": "http://127.0.0.1:8000",
-            "description": "Entorno local"
+            "url": "/",
+            "description": "Origen actual (local o Docker)"
         }
     ],
     "paths": {
@@ -669,6 +669,80 @@
                     }
                 }
             }
+        },
+        "/api/reports/sales": {
+            "get": {
+                "tags": [
+                    "Reportes"
+                ],
+                "summary": "Total y cantidad de ventas en un período inclusivo de Lima",
+                "operationId": "salesReport",
+                "parameters": [
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "to",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Resumen de ventas"
+                    },
+                    "422": {
+                        "description": "Período inválido o mayor a 366 días"
+                    }
+                }
+            }
+        },
+        "/api/reports/low-stock": {
+            "get": {
+                "tags": [
+                    "Reportes"
+                ],
+                "summary": "Productos activos con existencias iguales o inferiores al umbral",
+                "operationId": "lowStockReport",
+                "parameters": [
+                    {
+                        "name": "threshold",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "default": 5,
+                            "maximum": 1000000,
+                            "minimum": 0
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Productos paginados"
+                    },
+                    "422": {
+                        "description": "Filtros inválidos"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -707,6 +781,9 @@
         },
         {
             "name": "Ventas"
+        },
+        {
+            "name": "Reportes"
         }
     ]
 }

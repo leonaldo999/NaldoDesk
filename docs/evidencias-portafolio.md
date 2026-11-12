@@ -57,3 +57,9 @@ Validación local del 22 de octubre de 2026. Se usaron cuentas y negocios fictic
 [Video del recorrido de venta](evidencias/frontend/recorrido-venta.webm) · [Video de la ventana observadora](evidencias/frontend/aviso-venta.webm)
 
 Para reproducirlo, consulta la [guía de frontend local](frontend-local.md). El detalle del cierre está en la [Fase 13](fase-13-frontend.md). Los videos son grabaciones de pruebas automatizadas, sin narración, y los datos se retiran al finalizar el cleanup.
+
+## Fase 14 — Reportes
+
+![Ventas por período y stock bajo con datos ficticios](evidencias/frontend/reportes.png)
+
+La prueba de navegador registró una venta de 25.00, verificó que el inventario pasó de 15 a 13 unidades y comprobó que el producto aparece al aplicar un umbral de 13.

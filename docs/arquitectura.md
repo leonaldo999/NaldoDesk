@@ -118,6 +118,7 @@ En la Fase 4, Laravel guarda venta, líneas y movimientos de inventario dentro d
 | 11 | Linux |
 | 12 | Portafolio local para CV: recorrido de demo, evidencias y documentación; despliegue AWS aplazado |
 | 13 | Frontend React + Vite + Tailwind CSS para demo local |
+| 14 | [Reportes básicos](fase-14-reportes.md): ventas por período y stock bajo |
 
 La [Fase 13](fase-13-frontend.md) define la interfaz React con Vite y Tailwind CSS para la demo local. La interfaz se ejecuta localmente y no depende de AWS. Incluye sesión, catálogo, inventario, ventas, usuarios y avisos de venta; los reportes avanzados quedan fuera.
 

@@ -7,6 +7,7 @@ import {
   Users,
   Package,
   ReceiptText,
+  ChartNoAxesColumn,
   UserRoundCog,
   LogOut,
 } from 'lucide-react'
@@ -18,6 +19,7 @@ const links = [
   ['/clientes', 'Clientes', Users],
   ['/productos', 'Productos', Package],
   ['/ventas', 'Ventas', ReceiptText],
+  ['/reportes', 'Reportes', ChartNoAxesColumn],
 ]
 export default function Layout() {
   const { user, logout } = useSession()

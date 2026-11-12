@@ -140,3 +140,7 @@ Las [evidencias del portafolio local](docs/evidencias-portafolio.md) incluyen ca
 La [Fase 13](docs/fase-13-frontend.md) incorpora la interfaz local: sesión, clientes, productos, inventario, ventas, usuarios y avisos de venta. Abre **http://localhost:8080** con Docker activo y usa tu cuenta local. Consulta la [guía de frontend](docs/frontend-local.md) para compilar, desarrollar con Vite, ejecutar pruebas y recorrer la demo. AWS sigue aplazado; presupuesto de infraestructura USD 0.
 
 Para presentar el proyecto, consulta el [texto para el CV y guion de 90 segundos](docs/portafolio-cv.md).
+
+## Fase 14 — Reportes básicos
+
+Desde **Reportes** consulta el importe y número de ventas por período, y los productos activos por debajo del umbral de stock o en el límite. Consulta la [guía de reportes](docs/fase-14-reportes.md).

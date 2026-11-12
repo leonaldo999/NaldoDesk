@@ -43,7 +43,7 @@ test.describe.serial('Demo local con API, PostgreSQL y realtime reales', () => {
       page.getByRole('heading', { name: 'Vista general', exact: true }),
     ).toBeVisible()
     await page.screenshot({
-      path: '../docs/evidencias/frontend/inicio-escritorio.png',
+      path: 'test-results/evidence/inicio-escritorio.png',
       fullPage: true,
     })
     await page.setViewportSize({ width: 390, height: 844 })
@@ -61,7 +61,7 @@ test.describe.serial('Demo local con API, PostgreSQL y realtime reales', () => {
       ),
     ).toBe(true)
     await page.screenshot({
-      path: '../docs/evidencias/frontend/clientes-movil.png',
+      path: 'test-results/evidence/clientes-movil.png',
       fullPage: true,
     })
   })
@@ -120,7 +120,7 @@ test.describe.serial('Demo local con API, PostgreSQL y realtime reales', () => {
       observer.getByRole('cell', { name: `#${saleId}`, exact: true }),
     ).toBeVisible()
     await page.screenshot({
-      path: '../docs/evidencias/frontend/venta-confirmada.png',
+      path: 'test-results/evidence/venta-confirmada.png',
       fullPage: true,
     })
     await observer.close()
@@ -131,6 +131,30 @@ test.describe.serial('Demo local con API, PostgreSQL y realtime reales', () => {
     ).toBeVisible()
   })
 
+  test('consulta reportes sobre la venta y el stock reales', async ({
+    page,
+  }, testInfo) => {
+    await page.goto('/reportes')
+    await expect(
+      page.getByRole('heading', { name: 'Reportes', exact: true }),
+    ).toBeVisible()
+    await expect(page.getByText('25.00', { exact: true })).toBeVisible()
+    await expect(
+      page.getByText(/No hay productos con stock bajo/),
+    ).toBeVisible()
+    await page.getByLabel('Umbral de unidades').fill('13')
+    await page.getByRole('button', { name: 'Consultar stock' }).click()
+    const product = page.getByRole('row').filter({ hasText: productName })
+    await expect(
+      product.getByRole('cell', { name: '13', exact: true }),
+    ).toBeVisible()
+    await page.screenshot({
+      path: testInfo.outputPath('reportes.png'),
+      fullPage: true,
+    })
+    await product.getByRole('link', { name: /Ver inventario/ }).click()
+    await expect(page).toHaveURL(/\/productos\/\d+\/inventario$/)
+  })
   test('rechaza falta de stock y registra venta de mostrador', async ({
     page,
     browser,
@@ -206,7 +230,7 @@ test.describe.serial('Demo local con API, PostgreSQL y realtime reales', () => {
       ),
     ).toBe(true)
     await page.screenshot({
-      path: '../docs/evidencias/frontend/productos-movil.png',
+      path: 'test-results/evidence/productos-movil.png',
       fullPage: true,
     })
     await page.setViewportSize({ width: 1440, height: 1000 })

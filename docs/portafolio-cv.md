@@ -10,3 +10,5 @@
 4. **75–90 s:** muestra el aviso de venta en otra ventana del mismo negocio y explica cómo se reproduce el entorno con Docker.
 
 Usa un negocio dedicado a la demo. La [guía de ejecución](frontend-local.md) explica cómo preparar Docker, crear la cuenta y cargar datos ficticios. Para revisar sin instalar nada, consulta las [capturas y grabaciones](evidencias-portafolio.md).
+
+Si dispones de unos segundos más, abre **Reportes**: muestra el total del período y ajusta el umbral de stock para localizar el producto de la demo.

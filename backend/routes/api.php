@@ -1,13 +1,14 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\InventoryMovementController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SaleController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\ClientController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\InventoryMovementController;
-use App\Http\Controllers\SaleController;
 
 Route::get('/health', function () {
     try {
@@ -48,4 +49,6 @@ Route::middleware(['auth:sanctum', 'business.assigned'])->group(function (): voi
     Route::get('/sales', [SaleController::class, 'index']);
     Route::post('/sales', [SaleController::class, 'store']);
     Route::get('/sales/{sale}', [SaleController::class, 'show']);
+    Route::get('/reports/sales', [ReportController::class, 'sales']);
+    Route::get('/reports/low-stock', [ReportController::class, 'lowStock']);
 });
