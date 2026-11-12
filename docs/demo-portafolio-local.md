@@ -83,3 +83,9 @@ docker compose --env-file .env.docker --profile test run --build --rm tests
 ```
 
 La prueba verifica repetición sin duplicados, que el stock no se restablece y el rechazo del entorno `production`. Este perfil no ejecuta cambios en los volúmenes PostgreSQL ni Redis del stack local.
+
+## Recorrido con la interfaz React
+
+La [guía de frontend](frontend-local.md) explica el recorrido visual completo. Con la imagen Nginx reconstruida, abre [NaldoDesk](http://localhost:8080), inicia sesión con tu cuenta y recorre clientes → productos → inventario → nueva venta → detalle. Una segunda ventana del mismo negocio recibe el aviso de venta; la sesión staff no permite gestionar usuarios.
+
+Las pruebas Playwright usan negocios ficticios independientes y sus propios datos; el comando de seed descrito arriba conserva el negocio de demo indicado por ti.

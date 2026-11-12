@@ -17,5 +17,14 @@ backend/bootstrap/cache/*.php
 realtime/.env
 realtime/node_modules
 realtime/coverage
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
+frontend/node_modules
+frontend/dist
+frontend/coverage
+frontend/test-results
+frontend/playwright-report
+frontend/*.local.json
 **/.DS_Store
 **/Thumbs.db

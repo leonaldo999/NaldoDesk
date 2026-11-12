@@ -16,7 +16,7 @@ final class RedisEventPublisher
         }
 
         try {
-            Redis::publish(config('realtime.event_channel'), json_encode([
+            Redis::connection('realtime')->publish(config('realtime.event_channel'), json_encode([
                 'event' => 'sale.created',
                 'business_id' => (int) $sale->business_id,
                 'payload' => [

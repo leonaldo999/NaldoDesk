@@ -21,7 +21,9 @@ class RealtimeSaleEventsTest extends TestCase
         config(['realtime.enabled' => true]);
         [$user, $product] = $this->businessUserAndProduct();
 
-        Redis::shouldReceive('publish')
+        $publisher = Mockery::mock();
+        Redis::shouldReceive('connection')->once()->with('realtime')->andReturn($publisher);
+        $publisher->shouldReceive('publish')
             ->once()
             ->with('naldo:events', Mockery::on(function (string $rawMessage) use ($user): bool {
                 $message = json_decode($rawMessage, true, flags: JSON_THROW_ON_ERROR);
@@ -46,7 +48,9 @@ class RealtimeSaleEventsTest extends TestCase
         config(['realtime.enabled' => true]);
         [$user, $product] = $this->businessUserAndProduct();
 
-        Redis::shouldReceive('publish')
+        $publisher = Mockery::mock();
+        Redis::shouldReceive('connection')->once()->with('realtime')->andReturn($publisher);
+        $publisher->shouldReceive('publish')
             ->once()
             ->andThrow(new RuntimeException('Redis is unavailable.'));
 

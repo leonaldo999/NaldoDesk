@@ -4,6 +4,13 @@ WORKDIR /app
 COPY backend/ ./
 RUN npm ci && npm run build
 
+FROM node:22-alpine AS frontend-assets
+WORKDIR /frontend
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm ci
+COPY frontend/ ./
+RUN npm run build
+
 FROM php:8.5-fpm-trixie AS app
 
 RUN apt-get update \
@@ -29,6 +36,7 @@ FROM nginx:1.31-alpine AS nginx
 COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY backend/public/ /var/www/html/public/
 COPY --from=assets /app/public/build/ /var/www/html/public/build/
+COPY --from=frontend-assets /frontend/dist/ /var/www/frontend/
 RUN mkdir -p /var/www/html/storage/app/public \
     && ln -s /var/www/html/storage/app/public /var/www/html/public/storage
 

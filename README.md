@@ -134,3 +134,9 @@ El objetivo actual es aprender y presentar el proyecto en el CV, con **USD 0 de 
 Para preparar un recorrido reproducible de login, catálogo, inventario y ventas, sigue la [guía de demostración local](docs/demo-portafolio-local.md). `naldo:seed-demo` agrega registros ficticios al negocio indicado, no crea credenciales y no reinicia el stock al repetirse.
 
 Las [evidencias del portafolio local](docs/evidencias-portafolio.md) incluyen capturas de Swagger y salud de la API, además de los resultados de las pruebas automatizadas.
+
+## Fase 13 — Frontend React, Vite y Tailwind CSS
+
+La [Fase 13](docs/fase-13-frontend.md) incorpora la interfaz local: sesión, clientes, productos, inventario, ventas, usuarios y avisos de venta. Abre **http://localhost:8080** con Docker activo y usa tu cuenta local. Consulta la [guía de frontend](docs/frontend-local.md) para compilar, desarrollar con Vite, ejecutar pruebas y recorrer la demo. AWS sigue aplazado; presupuesto de infraestructura USD 0.
+
+Para presentar el proyecto, consulta el [texto para el CV y guion de 90 segundos](docs/portafolio-cv.md).

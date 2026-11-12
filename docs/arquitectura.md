@@ -22,7 +22,7 @@ La propuesta comienza como una aplicación modular, no como un conjunto de micro
 ```text
 Navegador
    │
-   ├── Interfaz web (React, Vite, JavaScript y Tailwind CSS; fase por definir)
+   ├── Interfaz web (React, Vite, JavaScript y Tailwind CSS; Fase 13)
    │       │ HTTP / JSON
    │       ▼
    └── API REST (PHP y Laravel)
@@ -31,7 +31,7 @@ Navegador
         PostgreSQL
 ```
 
-Laravel será responsable de las reglas del negocio, validación de solicitudes, autorización, acceso a datos y respuestas de la API. PostgreSQL será la fuente principal de datos. La interfaz React consumirá la API mediante HTTP y JSON cuando se planifique su incorporación.
+Laravel será responsable de las reglas del negocio, validación de solicitudes, autorización, acceso a datos y respuestas de la API. PostgreSQL será la fuente principal de datos. La interfaz React consume la API mediante HTTP y JSON desde la Fase 13, documentada en `docs/fase-13-frontend.md`.
 
 La Fase 1 se concentra deliberadamente en Laravel, PostgreSQL y REST. La incorporación y el despliegue del frontend requieren alcance y fase acordados antes de implementarlos; no se asume que deban adelantarse a esa fase.
 
@@ -41,7 +41,7 @@ La Fase 1 se concentra deliberadamente en Laravel, PostgreSQL y REST. La incorpo
 | --- | --- | ---: |
 | Laravel / PHP | API REST, reglas de negocio, validación y acceso a datos | 1 en adelante |
 | PostgreSQL | Persistencia relacional de usuarios y datos comerciales | 1 en adelante |
-| React / Vite / JavaScript / Tailwind CSS | Interfaz web que consume la API | Pendiente de planificar |
+| React / Vite / JavaScript / Tailwind CSS | Interfaz local que consume la API REST y Socket.io | 13 |
 | Swagger / OpenAPI | Contrato y documentación navegable de la API | 5 |
 | Redis | Capacidad de almacenamiento en memoria para los casos de uso que se definan | 6 |
 | GraphQL | Interfaz adicional de consulta, con límites claros respecto a REST | 7 |
@@ -80,7 +80,7 @@ En la Fase 7, el endpoint GraphQL `/graphql` sirve como adaptador adicional de c
 
 En la Fase 8, Laravel publica por Redis Pub/Sub el evento mínimo `sale.created` después de confirmar la venta. Un proceso Node.js con Socket.io valida la sesión con Laravel y transmite la notificación a la sala derivada del negocio autenticado. Las notificaciones no reemplazan consultas REST ni se conservan como historial.
 
-En la Fase 9, Jest prueba el servicio JavaScript existente de Socket.io, incluidas autorización, aislamiento por negocio y una integración Redis opcional. PHPUnit continúa siendo el framework de pruebas para Laravel. La interfaz React aún no está implementada; sus pruebas se definirán cuando se planifique esa interfaz.
+En la Fase 9, Jest prueba el servicio JavaScript existente de Socket.io, incluidas autorización, aislamiento por negocio y una integración Redis opcional. PHPUnit continúa siendo el framework de pruebas para Laravel. La Fase 13 incorpora React y sus pruebas con Vitest, React Testing Library y Playwright; Jest conserva su alcance en realtime.
 
 En la Fase 10, Docker Compose ejecuta PHP-FPM/Laravel, PostgreSQL, Redis, Socket.io y Nginx. Solo Nginx publica `127.0.0.1:8080`; los puertos de PostgreSQL y Redis permanecen en la red privada de Compose. Los datos usan volúmenes propios, la configuración sensible local va en `.env.docker` ignorado por Git y las migraciones se lanzan de forma explícita. Una imagen separada incorpora PHPUnit y ejecuta pruebas contra SQLite en memoria y Redis de Compose.
 
@@ -117,8 +117,9 @@ En la Fase 4, Laravel guarda venta, líneas y movimientos de inventario dentro d
 | 10 | Docker + Docker Compose + Nginx |
 | 11 | Linux |
 | 12 | Portafolio local para CV: recorrido de demo, evidencias y documentación; despliegue AWS aplazado |
+| 13 | Frontend React + Vite + Tailwind CSS para demo local |
 
-La interfaz React está en los requisitos del producto, pero no aparece como fase independiente en este orden. Su momento de implementación debe acordarse antes de construirla. El dashboard, notificaciones y reportes también necesitan alcance detallado en las fases de dominio correspondientes.
+La [Fase 13](fase-13-frontend.md) define la interfaz React con Vite y Tailwind CSS para la demo local. La interfaz se ejecuta localmente y no depende de AWS. Incluye sesión, catálogo, inventario, ventas, usuarios y avisos de venta; los reportes avanzados quedan fuera.
 
 ## 10. Riesgos técnicos y mitigaciones
 
@@ -146,7 +147,7 @@ La interfaz React está en los requisitos del producto, pero no aparece como fas
 
 Se resolverán cuando sean necesarias, evitando fijar detalles sin contexto de implementación:
 
-- Momento y alcance de la interfaz React dentro del roadmap.
+- Evolución de la interfaz fuera del MVP visual definido en la Fase 13.
 - Soportar una cuenta que pertenezca a varios negocios, si el producto lo requiere; el MVP asigna cada usuario a un solo negocio.
 - Modelo de datos y reglas para inventario, ventas, devoluciones y concurrencia.
 - Casos de uso adicionales para Redis, GraphQL y tiempo real fuera de la consulta GraphQL inicial y el evento `sale.created`.
@@ -157,3 +158,9 @@ Se resolverán cuando sean necesarias, evitando fijar detalles sin contexto de i
 ## 13. Criterio de cierre de la Fase 0
 
 La Fase 0 se considera documentada cuando el roadmap, los componentes base, las responsabilidades y los riesgos están visibles en este archivo. Antes de iniciar cada fase de implementación se explicarán su objetivo, problema, archivos, tecnologías y comprobaciones, y se aclararán las decisiones pendientes que afecten su alcance.
+
+## 14. Integración del frontend local (Fase 13)
+
+`frontend/` usa React, Vite, JavaScript y Tailwind CSS. Nginx sirve su compilación y preserva las rutas de Laravel y Socket.io. En desarrollo Vite usa localhost:5173 y la API local localhost:8080. Sanctum mantiene cookies y CSRF; la interfaz no persiste contraseñas ni tokens de sesión. Las escrituras son REST y los eventos de venta invalidan consultas, con refresco REST al reconectar.
+
+El publicador Laravel usa una conexión Redis `realtime` sin prefijo para coincidir con el canal literal de Node; caché y colas conservan sus prefijos. El cliente usa WebSocket para cumplir el control de Origin del servicio realtime también al servir todo desde el mismo origen. Consulta la [guía de frontend local](frontend-local.md) para ejecución y pruebas.

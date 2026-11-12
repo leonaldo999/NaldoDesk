@@ -14,7 +14,7 @@ Secuencia propuesta para preparar el portafolio:
 2. Preparar datos ficticios de demostración y un recorrido de autenticación, clientes, productos, inventario y ventas. No publicar datos personales, contraseñas ni archivos `.env`.
 3. Incorporar capturas y un video corto de la API, Swagger, pruebas y funcionamiento de Socket.io. Una demostración local permite enseñar el trabajo sin mantener un servidor público.
 4. Revisar el repositorio para presentación: README claro, arquitectura, instrucciones, evidencias de pruebas y límites conocidos. El repositorio ya está en GitHub; antes de compartir una nueva versión, revisar secretos e historial. No se hará un nuevo push como parte de esta fase sin una solicitud específica.
-5. Planificar la interfaz React en una fase propia para disponer de una demostración visual, manteniendo su ejecución local. No está implementada ni se considera necesaria para describir con precisión el backend existente.
+5. Usar la interfaz React implementada en la [Fase 13](fase-13-frontend.md) para la demostración visual local; el backend también puede presentarse por separado con Swagger.
 6. Preparar una descripción para el CV basada en lo realmente implementado. AWS debe figurar como arquitectura propuesta o aprendizaje futuro, nunca como despliegue realizado.
 
 Criterio de entrega del portafolio: ejecución local reproducible, recorrido con datos ficticios, evidencias de pruebas, capturas/video y descripción verificable para el CV. Estas tareas están propuestas, no completadas por este documento. El despliegue AWS queda aplazado; completar el portafolio no implica desplegar AWS.
@@ -25,7 +25,7 @@ No se crearán recursos ni se incurrirá en cargos hasta revisar y confirmar con
 
 ## Alcance y punto de partida
 
-Publicar la API Laravel, PostgreSQL, Redis y Socket.io existentes mediante Docker Compose en un servidor Linux. El frontend React continúa pendiente de planificación y no está incluido. Las verificaciones Linux de la Fase 11 constan en su documento; no se han repetido para elaborar este plan.
+Publicar la API Laravel, PostgreSQL, Redis y Socket.io existentes mediante Docker Compose en un servidor Linux. El frontend React está definido en la [Fase 13](fase-13-frontend.md), implementado localmente y fuera de esta referencia de despliegue. Las verificaciones Linux de la Fase 11 constan en su documento; no se han repetido para elaborar este plan.
 
 La propuesta inicial es una instancia Lightsail Linux de 4 GB con IPv4 pública y disco de 80 GB. Todos los servicios compartirían servidor: apropiado como hipótesis de partida para una demostración o piloto de poco tráfico, sujeto a pruebas de memoria y carga. No ofrece alta disponibilidad; una caída afecta API, datos y notificaciones. No presupone capacidad comercial validada.
 
