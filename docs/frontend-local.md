@@ -87,3 +87,13 @@ La ejecución es local. AWS y publicación pública siguen aplazados.
 - [Integración oficial Tailwind con Vite](https://tailwindcss.com/docs/installation/using-vite).
 - [Guía de Vite](https://vite.dev/guide/).
 - [WebSocketRoute de Playwright](https://playwright.dev/docs/api/class-websocketroute): permite cortar el transporte en la prueba de reconexión; los mensajes se entregan desde el servidor real.
+
+## Recuperar una contraseña local
+
+Desde la raíz del repositorio, con Docker activo:
+
+```powershell
+docker compose --env-file .env.docker exec app php artisan naldo:reset-password
+```
+
+Escribe el correo de tu cuenta y confirma una contraseña nueva de al menos 12 caracteres. La terminal oculta lo que escribes. El comando conserva tu cuenta, rol y datos del negocio, y cierra las sesiones anteriores. Si el contenedor se creó con una imagen anterior al comando, reconstruye el servicio `app` antes de ejecutarlo.

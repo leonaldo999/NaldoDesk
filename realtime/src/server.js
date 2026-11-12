@@ -84,6 +84,7 @@ export async function createRealtimeServer({
 
   io.on('connection', (socket) => {
     socket.join(`business:${socket.data.businessId}`);
+    console.info('Conexión Socket.IO autorizada', { businessId: socket.data.businessId });
 
     let checkingSession = false;
     const revalidationTimer = setInterval(async () => {
@@ -110,7 +111,10 @@ export async function createRealtimeServer({
     const message = parseRealtimeMessage(rawMessage);
     if (!message) return;
 
+    const context = { event: message.event, businessId: message.businessId, saleId: message.payload.id };
+    console.info('Evento recibido de Redis', { channel: eventChannel, ...context });
     io.to(`business:${message.businessId}`).emit(message.event, message.payload);
+    console.info('Evento emitido por Socket.IO', context);
   });
 
   return { io, httpServer };

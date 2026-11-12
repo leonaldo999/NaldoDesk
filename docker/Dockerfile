@@ -13,6 +13,9 @@ RUN npm run build
 
 FROM php:8.5-fpm-trixie AS app
 
+COPY docker/php/security.ini /usr/local/etc/php/conf.d/security.ini
+COPY docker/php/access-log.conf /usr/local/etc/php-fpm.d/zz-request-log.conf
+
 RUN apt-get update \
     && apt-get install -y --no-install-recommends libpq-dev libzip-dev \
     && apt-mark manual libpq5 libzip5 \

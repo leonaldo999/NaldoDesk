@@ -144,3 +144,7 @@ Para presentar el proyecto, consulta el [texto para el CV y guion de 90 segundos
 ## Fase 14 — Reportes básicos
 
 Desde **Reportes** consulta el importe y número de ventas por período, y los productos activos por debajo del umbral de stock o en el límite. Consulta la [guía de reportes](docs/fase-14-reportes.md).
+
+## Fase 15 — Exportación CSV
+
+Desde **Reportes** puedes descargar el resumen de ventas y la lista completa de stock bajo. Consulta la [guía CSV](docs/fase-15-exportacion-csv.md).

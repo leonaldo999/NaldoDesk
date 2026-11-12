@@ -9,4 +9,4 @@ COPY src/ ./src/
 
 USER node
 EXPOSE 3001
-CMD ["npm", "start"]
+CMD ["node", "src/server.js"]

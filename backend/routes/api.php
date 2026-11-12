@@ -51,4 +51,6 @@ Route::middleware(['auth:sanctum', 'business.assigned'])->group(function (): voi
     Route::get('/sales/{sale}', [SaleController::class, 'show']);
     Route::get('/reports/sales', [ReportController::class, 'sales']);
     Route::get('/reports/low-stock', [ReportController::class, 'lowStock']);
+    Route::get('/reports/sales/csv', [ReportController::class, 'salesCsv']);
+    Route::get('/reports/low-stock/csv', [ReportController::class, 'lowStockCsv']);
 });

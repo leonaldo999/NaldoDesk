@@ -8,7 +8,50 @@ import {
   Pagination,
 } from '../components/ui'
 import { amount } from '../services/format'
+import { api, errorMessage } from '../services/api'
 import { useResource } from '../services/use-resource'
+
+function CsvButton({ path, filename, label }) {
+  const [pending, setPending] = useState(false)
+  const [error, setError] = useState('')
+
+  async function download() {
+    setPending(true)
+    setError('')
+    try {
+      const { data, headers } = await api.get(path, { responseType: 'blob' })
+      if (!headers['content-type']?.startsWith('text/csv')) {
+        throw new Error('Respuesta CSV inválida')
+      }
+      const url = URL.createObjectURL(data)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = filename
+      document.body.append(link)
+      link.click()
+      link.remove()
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000)
+    } catch (failure) {
+      setError(errorMessage(failure))
+    } finally {
+      setPending(false)
+    }
+  }
+
+  return (
+    <div className="mt-4">
+      <button
+        type="button"
+        className="button secondary"
+        onClick={download}
+        disabled={pending}
+      >
+        {pending ? 'Preparando CSV…' : label}
+      </button>
+      <ErrorNotice message={error} />
+    </div>
+  )
+}
 
 function limaToday() {
   return new Intl.DateTimeFormat('sv-SE', { timeZone: 'America/Lima' }).format(
@@ -83,6 +126,13 @@ export default function Reports() {
             </div>
           </dl>
         )}
+        {sales.data && (
+          <CsvButton
+            path={'/api/reports/sales/csv?' + new URLSearchParams(period)}
+            filename="ventas.csv"
+            label="Descargar ventas en CSV"
+          />
+        )}
       </section>
       <section className="panel">
         <h2>Productos con stock bajo</h2>
@@ -150,6 +200,14 @@ export default function Reports() {
               </div>
             )}
             <Pagination data={stock.data} page={page} setPage={setPage} />
+            <CsvButton
+              path={
+                '/api/reports/low-stock/csv?' +
+                new URLSearchParams({ threshold })
+              }
+              filename="stock-bajo.csv"
+              label="Descargar stock bajo en CSV"
+            />
           </>
         )}
       </section>

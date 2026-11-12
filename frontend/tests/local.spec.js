@@ -148,6 +148,20 @@ test.describe.serial('Demo local con API, PostgreSQL y realtime reales', () => {
     await expect(
       product.getByRole('cell', { name: '13', exact: true }),
     ).toBeVisible()
+    for (const [label, filename, expected] of [
+      ['Descargar ventas en CSV', 'ventas.csv', ',America/Lima,1,25.00'],
+      [
+        'Descargar stock bajo en CSV',
+        'stock-bajo.csv',
+        '"' + productName + '",E2E-' + suffix + ',13,13',
+      ],
+    ]) {
+      const downloadPromise = page.waitForEvent('download')
+      await page.getByRole('button', { name: label }).click()
+      const download = await downloadPromise
+      expect(download.suggestedFilename()).toBe(filename)
+      expect(readFileSync(await download.path(), 'utf8')).toContain(expected)
+    }
     await page.screenshot({
       path: testInfo.outputPath('reportes.png'),
       fullPage: true,

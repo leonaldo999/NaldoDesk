@@ -35,6 +35,11 @@ class ReportsTest extends TestCase
 
         $this->getJson('/api/reports/sales?from=2026-11-13&to=2026-11-13')
             ->assertOk()->assertJsonPath('data.sale_count', 0)->assertJsonPath('data.total', '0.00');
+
+        $csv = $this->get('/api/reports/sales/csv?from=2026-11-11&to=2026-11-11')
+            ->assertOk()->assertDownload('ventas.csv')->streamedContent();
+        $this->assertStringStartsWith("\xEF\xBB\xBF", $csv);
+        $this->assertStringContainsString("2026-11-11,2026-11-11,America/Lima,2,12.45\r\n", $csv);
     }
 
     public function test_stock_includes_zero_and_threshold_but_excludes_inactive_and_other_businesses(): void
@@ -60,17 +65,34 @@ class ReportsTest extends TestCase
 
         $this->getJson('/api/reports/low-stock?threshold=0')
             ->assertOk()->assertJsonCount(1, 'data')->assertJsonPath('data.0.stock_on_hand', 0);
+
+        for ($i = 0; $i < 16; $i++) {
+            Product::create([
+                'business_id' => $user->business_id, 'name' => 'Repuesto, edición "A"',
+                'sku' => '=TEST'.$i, 'price' => '1.00', 'stock_on_hand' => 0, 'is_active' => true,
+            ]);
+        }
+
+        $csv = $this->get('/api/reports/low-stock/csv?threshold=0&page=2')
+            ->assertOk()->assertDownload('stock-bajo.csv')->streamedContent();
+        $this->assertSame(18, substr_count($csv, "\r\n"));
+        $this->assertStringContainsString('"Repuesto, edición ""A""",\'=TEST15,0,0', $csv);
+        $this->assertStringNotContainsString('AJENO', $csv);
+        $this->assertStringNotContainsString('ARCHIVO', $csv);
     }
 
     public function test_reports_require_a_session_and_validate_filters(): void
     {
         $this->getJson('/api/reports/sales')->assertUnauthorized();
         $this->getJson('/api/reports/low-stock')->assertUnauthorized();
+        $this->getJson('/api/reports/sales/csv')->assertUnauthorized();
+        $this->getJson('/api/reports/low-stock/csv')->assertUnauthorized();
         $this->actingAs($this->staff('Tienda'));
 
         $this->getJson('/api/reports/sales?from=2026-11-12&to=2026-11-11')->assertUnprocessable()->assertJsonValidationErrors('to');
         $this->getJson('/api/reports/sales?from=2024-01-01&to=2026-11-11')->assertUnprocessable()->assertJsonValidationErrors('to');
         $this->getJson('/api/reports/low-stock?threshold=-1')->assertUnprocessable()->assertJsonValidationErrors('threshold');
+        $this->getJson('/api/reports/low-stock/csv?threshold=-1')->assertUnprocessable()->assertJsonValidationErrors('threshold');
     }
 
     private function staff(string $business): User
